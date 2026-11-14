@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshRoute B2B - Demo Interactiva del Sistema</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js for real-time telemetry -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="assets/js/tailwind.config.js"></script>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+  <!-- Top Navigation & Presentation Pitch Bar -->
+  <header class="bg-slate-800/95 border-b border-slate-700/80 sticky top-0 z-50 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Project Tag -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-brand-500/20 text-white font-black text-xl">
+          <i class="fa-solid fa-snowflake"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg text-white tracking-tight">FreshRoute <span class="text-brand-400">B2B</span></span>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              Demo Coloquio Final
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Distribución Inteligente y Telemetría IoT en Frío (CAA Art. 154 bis)</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher Tabs -->
+      <div class="flex items-center bg-slate-900/80 p-1 rounded-xl border border-slate-700">
+        <button id="btnViewOffice" onclick="switchView('office')" 
+          class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-brand-600 text-white shadow-md">
+          <i class="fa-solid fa-desktop"></i>
+          <span>1. Plataforma Web (Oficina)</span>
+        </button>
+        <button id="btnViewDriver" onclick="switchView('driver')" 
+          class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white">
+          <i class="fa-solid fa-mobile-screen"></i>
+          <span>2. App Chofer (Flutter)</span>
+        </button>
+      </div>
+
+      <!-- Pitch Helper & Financial Modal Trigger -->
+      <div class="flex items-center gap-2">
+        <button onclick="togglePitchModal()" 
+          class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 border border-slate-600 text-xs font-bold text-amber-300 transition shadow">
+          <i class="fa-solid fa-chart-line text-amber-400"></i>
+          <span>Datos Clave / Pitch (ROI)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: PLATAFORMA WEB DESPACHO (OFICINA) -->
+    <!-- ========================================================================= -->
+    <div id="viewOffice" class="space-y-6">
+      
+      <!-- Top Operational Metrics Bar -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Flota en Calle</p>
+            <p class="text-2xl font-black text-white mt-1">25 <span class="text-xs font-normal text-slate-400">furgones</span></p>
+            <p class="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+              <i class="fa-solid fa-check-circle"></i> 15 rutas simultáneas
+            </p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-brand-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-truck-fast"></i>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Clientes B2B Activos</p>
+            <p class="text-2xl font-black text-white mt-1">120 <span class="text-xs font-normal text-slate-400">locales</span></p>
+            <p class="text-xs text-slate-300 mt-1">CABA & Zona Norte / Oeste</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-utensils"></i>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Cumplimiento Ventanas</p>
+            <p class="text-2xl font-black text-emerald-400 mt-1">98.4%</p>
+            <p class="text-xs text-slate-300 mt-1">Límite duro: 08:30 AM</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Cadena de Frío IoT</p>
+            <p id="kpiAvgTemp" class="text-2xl font-black text-cyan-400 mt-1">4.2°C</p>
+            <p class="text-xs text-cyan-300 mt-1 flex items-center gap-1">
+              <i class="fa-solid fa-temperature-arrow-down"></i> Rango 2°C - 8°C SENASA
+            </p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-temperature-half"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Operational Center: Live Route Canvas & Telemetry Graph -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left 2 Cols: Live Dispatch Map & Algorithmic Recalculation -->
+        <div class="lg:col-span-2 bg-slate-800/80 border border-slate-700 rounded-3xl p-5 flex flex-col justify-between space-y-4 shadow-xl">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700/60 pb-3">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-route text-brand-400"></i>
+                Consola Central de Despacho & Tracking AMBA
+              </h2>
+              <p class="text-xs text-slate-400">Ruta Activa #04: CABA Corredor Gastronómico Norte - Unidad Furgón #12</p>
+            </div>
+
+            <!-- Simulation Action Buttons -->
+            <div class="flex items-center gap-2">
+              <button onclick="simulateTrafficEvent()" 
+                class="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-semibold hover:bg-amber-500/30 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>Simular Corte en Gral. Paz</span>
+              </button>
+
+              <button id="btnRecalculate" onclick="triggerORToolsRecalculation()" 
+                class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-brand-600/30">
+                <i class="fa-solid fa-microchip"></i>
+                <span>Recalcular con OR-Tools (RF-04)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Canvas Interactive Map Simulation -->
+          <div class="relative w-full h-80 bg-slate-950 rounded-2xl border border-slate-700/60 overflow-hidden flex flex-col justify-between p-4">
+            <!-- Simulated GIS Map Grid Background -->
+            <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#38bdf8 1px, transparent 1px); background-size: 24px 24px;"></div>
+            
+            <!-- Map Overlay Legend -->
+            <div class="relative z-10 flex justify-between items-start pointer-events-none">
+              <div class="bg-slate-900/90 border border-slate-700/80 backdrop-blur rounded-xl px-3 py-2 text-xs space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span class="text-slate-300">Depósito Central (San Martín)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping"></span>
+                  <span class="text-slate-300 font-bold">Furgón #12 en Tránsito (GPS)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="mapStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    Ruta Óptima Activa
+                  </span>
+                </div>
+              </div>
+
+              <!-- Calculation Metric Live Tag -->
+              <div id="recalcStatBox" class="hidden bg-slate-900/90 border border-brand-500/60 rounded-xl px-3 py-2 text-xs text-right">
+                <p class="text-[10px] text-slate-400">Latencia OR-Tools Backend (RNF-04)</p>
+                <p class="text-emerald-400 font-mono font-bold text-sm">240 ms <span class="text-[10px] text-slate-300">&lt; 500ms OK</span></p>
+                <p class="text-[10px] text-amber-300">Ahorro: 3.8 km (-14% combustible)</p>
+              </div>
+            </div>
+
+            <!-- Visual Stops on Canvas -->
+            <div class="relative z-10 grid grid-cols-4 gap-2 my-auto text-center">
+              <div class="p-2 rounded-xl bg-slate-900/90 border border-emerald-500/40 flex flex-col items-center">
+                <div class="w-7 h-7 rounded-full bg-emerald-500 text-slate-900 font-black flex items-center justify-center text-xs">CD</div>
+                <span class="text-[11px] font-bold text-slate-200 mt-1">Parque San Martín</span>
+                <span class="text-[9px] text-emerald-400">Salida 07:30 hs</span>
+              </div>
+
+              <div id="nodeStop1" class="p-2 rounded-xl bg-slate-900/90 border border-brand-500/40 flex flex-col items-center">
+                <div class="w-7 h-7 rounded-full bg-brand-500 text-white font-black flex items-center justify-center text-xs">1</div>
+                <span class="text-[11px] font-bold text-slate-200 mt-1">Gourmet Palermo</span>
+                <span class="text-[9px] text-amber-300 font-mono">Ventana: 08:30 AM</span>
+              </div>
+
+              <div id="nodeStop2" class="p-2 rounded-xl bg-slate-900/90 border border-slate-700 flex flex-col items-center">
+                <div class="w-7 h-7 rounded-full bg-slate-700 text-slate-200 font-black flex items-center justify-center text-xs">2</div>
+                <span class="text-[11px] font-bold text-slate-200 mt-1">TechCorp Catalinas</span>
+                <span class="text-[9px] text-slate-400 font-mono">Viandas: 10:15 AM</span>
+              </div>
+
+              <div id="nodeStop3" class="p-2 rounded-xl bg-slate-900/90 border border-slate-700 flex flex-col items-center">
+                <div class="w-7 h-7 rounded-full bg-slate-700 text-slate-200 font-black flex items-center justify-center text-xs">3</div>
+                <span class="text-[11px] font-bold text-slate-200 mt-1">Bistró Recoleta</span>
+                <span class="text-[9px] text-slate-400 font-mono">Lácteos: 11:30 AM</span>
+              </div>
+            </div>
+
+            <!-- Bottom Route Alert Banner -->
+            <div id="mapEventBar" class="relative z-10 bg-slate-900/95 border border-slate-700 rounded-xl p-2.5 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                <span id="mapEventText" class="text-slate-300">Tráfico fluido en Av. Cantilo y Libertador. Sin demoras reportadas.</span>
+              </div>
+              <span class="text-slate-400 font-mono text-[11px]">GPS: -34.5711, -58.4233</span>
+            </div>
+          </div>
+
+          <!-- Stops Breakdown Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-700">
+                  <th class="pb-2 font-semibold">Parada</th>
+                  <th class="pb-2 font-semibold">Cliente B2B</th>
+                  <th class="pb-2 font-semibold">Carga Transportada</th>
+                  <th class="pb-2 font-semibold">Ventana Límite</th>
+                  <th class="pb-2 font-semibold">Estado de Entrega</th>
+                </tr>
+              </thead>
+              <tbody id="stopsTableBody" class="divide-y divide-slate-700/50">
+                <tr>
+                  <td class="py-2.5 font-bold text-white">#1</td>
+                  <td class="py-2.5">Restaurante Gourmet Palermo</td>
+                  <td class="py-2.5 text-slate-300">30 kg Pastas & Lácteos (2°C-4°C)</td>
+                  <td class="py-2.5 font-mono text-amber-400 font-bold">08:30 AM (Estricta)</td>
+                  <td class="py-2.5"><span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30 font-semibold">En camino</span></td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 font-bold text-white">#2</td>
+                  <td class="py-2.5">Comedor TechCorp Catalinas</td>
+                  <td class="py-2.5 text-slate-300">85 Viandas Termoselladas</td>
+                  <td class="py-2.5 font-mono text-slate-400">10:15 AM</td>
+                  <td class="py-2.5"><span class="px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 font-semibold">Pendiente</span></td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 font-bold text-white">#3</td>
+                  <td class="py-2.5">Bistró Recoleta Alvear</td>
+                  <td class="py-2.5 text-slate-300">20 kg Fiambres y Quesos</td>
+                  <td class="py-2.5 font-mono text-slate-400">11:30 AM</td>
+                  <td class="py-2.5"><span class="px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 font-semibold">Pendiente</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right Col: Real-time IoT Cold-Chain Telemetry Monitor -->
+        <div class="bg-slate-800/80 border border-slate-700 rounded-3xl p-5 flex flex-col justify-between space-y-4 shadow-xl">
+          <div class="border-b border-slate-700/60 pb-3 flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-temperature-three-quarters text-cyan-400"></i>
+                Telemetría IoT Térmica (RF-03)
+              </h2>
+              <p class="text-xs text-slate-400">Sensor BLE en Furgón #12 - Lectura c/1 min</p>
+            </div>
+            <span id="badgeThermalState" class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              Conforme SENASA
+            </span>
+          </div>
+
+          <!-- Realtime Chart Container -->
+          <div class="relative w-full h-48 bg-slate-950 p-2 rounded-2xl border border-slate-700/60">
+            <canvas id="telemetryChart"></canvas>
+          </div>
+
+          <!-- Thermal Thresholds Legend & Manual Trigger -->
+          <div class="space-y-3">
+            <div class="bg-slate-900/80 rounded-2xl p-3 border border-slate-700 text-xs space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400">Umbral Permitido (CAA Art. 154 bis):</span>
+                <span class="font-bold text-white">2.0°C a 8.0°C</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400">Última lectura telemática:</span>
+                <span id="txtCurrentTemp" class="font-mono font-bold text-cyan-400 text-sm">4.3°C</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400">Regla de Alerta de Falla:</span>
+                <span class="text-slate-300">&gt; 8°C por más de 3 min</span>
+              </div>
+            </div>
+
+            <!-- Alarm Simulation Trigger for Presentation -->
+            <div class="flex flex-col gap-2">
+              <button onclick="simulateThermalBreach()" 
+                class="w-full py-2.5 px-3 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/50 text-rose-300 text-xs font-bold transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-radiation"></i>
+                <span>Simular Desvío Térmico (>8.4°C Alerta)</span>
+              </button>
+
+              <button onclick="resetThermalState()" 
+                class="w-full py-1.5 px-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-rotate-left"></i>
+                <span>Restablecer Frío Normal (4.0°C)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: APP MÓVIL DEL CHOFER (SIMULADOR FLUTTER) -->
+    <!-- ========================================================================= -->
+    <div id="viewDriver" class="hidden flex justify-center items-center py-2">
+      
+      <!-- Smartphone Mockup Wrapper -->
+      <div class="mobile-screen bg-slate-950 flex flex-col overflow-hidden text-slate-100 relative">
+
+        <!-- Top Phone Speaker / Notch -->
+        <div class="w-full bg-slate-900 pt-3 pb-2 px-6 flex justify-between items-center text-xs text-slate-400 select-none z-30">
+          <span>08:14</span>
+          <div class="w-20 h-4 bg-slate-950 rounded-full flex items-center justify-center">
+            <div class="w-3 h-3 rounded-full bg-slate-800"></div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <i id="phoneNetworkIcon" class="fa-solid fa-wifi text-emerald-400"></i>
+            <i class="fa-solid fa-battery-three-quarters text-slate-300"></i>
+          </div>
+        </div>
+
+        <!-- Flutter App Header: RNF-02 Compliant, High Contrast -->
+        <div class="bg-brand-700 px-4 py-3 flex items-center justify-between text-white shadow-md z-20">
+          <div>
+            <h1 class="text-sm font-black tracking-wide flex items-center gap-2">
+              <i class="fa-solid fa-truck text-cyan-300"></i>
+              FreshRoute Móvil
+            </h1>
+            <p class="text-[11px] text-cyan-100 font-medium">Chofer: Hernán Díaz • Furgón #12</p>
+          </div>
+          <!-- Offline Mode Toggle (RNF-03 Demo) -->
+          <button onclick="toggleOfflineMode()" 
+            id="btnToggleOffline"
+            class="px-2.5 py-1 rounded-lg text-[10px] font-bold border transition flex items-center gap-1 bg-emerald-500/20 text-emerald-200 border-emerald-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="lblNetworkState">Online 4G</span>
+          </button>
+        </div>
+
+        <!-- Telemetry & Buffer Status Ribbon -->
+        <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-[11px]">
+          <div class="flex items-center gap-2">
+            <i class="fa-brands fa-bluetooth-b text-cyan-400"></i>
+            <span class="text-slate-400">Sensor BLE:</span>
+            <span id="appTempBadge" class="font-bold font-mono text-cyan-300">4.2°C</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-slate-400">
+            <i class="fa-solid fa-database text-amber-400"></i>
+            <span id="bufferStatusLabel">Buffer: 0 / 500 reg.</span>
+          </div>
+        </div>
+
+        <!-- App Screen Content Switcher -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3 bg-slate-900" id="driverAppScrollContainer">
+          
+          <!-- SCREEN 1: ACTIVE STOPS LIST (DEFAULT) -->
+          <div id="driverScreenStops" class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Hoja de Ruta del Día</span>
+              <span class="text-[11px] px-2 py-0.5 rounded bg-brand-900/60 text-brand-300 border border-brand-700/50 font-bold">1 / 3 completada</span>
+            </div>
+
+            <!-- Current Urgent Stop Card -->
+            <div class="bg-slate-800 rounded-2xl p-3.5 border-2 border-brand-500 shadow-lg space-y-3">
+              <div class="flex justify-between items-start">
+                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-brand-500 text-white">
+                  Próxima Parada Prioritaria
+                </span>
+                <span class="text-xs font-mono font-bold text-amber-400 flex items-center gap-1">
+                  <i class="fa-regular fa-clock"></i> 08:30 AM
+                </span>
+              </div>
+
+              <div>
+                <h3 class="font-bold text-base text-white">Restaurante Gourmet Palermo</h3>
+                <p class="text-xs text-slate-300 flex items-center gap-1 mt-0.5">
+                  <i class="fa-solid fa-location-dot text-rose-400"></i> Humboldt 1850, CABA
+                </p>
+                <div class="mt-2 text-xs bg-slate-900/70 p-2 rounded-xl text-slate-300 flex justify-between">
+                  <span>30 kg Pastas Refrigeradas</span>
+                  <span class="text-cyan-300 font-semibold font-mono">Temp: 2°C - 5°C</span>
+                </div>
+              </div>
+
+              <!-- Main Touch Action Button (RNF-02: Big thumb friendly) -->
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <button onclick="openDeliveryForm()" 
+                  class="touch-target col-span-2 py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-black text-sm tracking-wide transition flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30">
+                  <i class="fa-solid fa-signature text-base"></i>
+                  <span>INICIAR ENTREGA (e-POD)</span>
+                </button>
+                <button onclick="openIncidentModal()" 
+                  class="touch-target col-span-2 py-2 px-3 rounded-xl bg-slate-700 hover:bg-slate-600 active:scale-95 text-rose-300 font-bold text-xs transition flex items-center justify-center gap-2 border border-rose-500/30">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  <span>Reportar Rechazo o Incidencia (RF-05)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Subsequent Stop (Pending) -->
+            <div class="bg-slate-800/60 rounded-2xl p-3 border border-slate-700/60 opacity-80 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-slate-400 font-bold">Parada #2</span>
+                <span class="text-slate-400 font-mono">10:15 AM</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-200">Comedor TechCorp Catalinas</h4>
+              <p class="text-xs text-slate-400">Av. Madero 900 • 85 Viandas Termoselladas</p>
+            </div>
+
+            <!-- Subsequent Stop 3 -->
+            <div class="bg-slate-800/60 rounded-2xl p-3 border border-slate-700/60 opacity-80 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-slate-400 font-bold">Parada #3</span>
+                <span class="text-slate-400 font-mono">11:30 AM</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-200">Bistró Recoleta Alvear</h4>
+              <p class="text-xs text-slate-400">Av. Alvear 1650 • 20 kg Fiambres y Lácteos</p>
+            </div>
+          </div>
+
+
+          <!-- SCREEN 2: e-POD DIGITAL REMITO FORM (RF-02) -->
+          <div id="driverScreenEPOD" class="hidden space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <button onclick="cancelDeliveryForm()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1">
+                <i class="fa-solid fa-arrow-left"></i> Volver
+              </button>
+              <span class="text-xs font-bold text-brand-400">Remito Digital #REM-2026-089</span>
+            </div>
+
+            <div class="bg-slate-800/90 rounded-2xl p-3 border border-slate-700 space-y-3 text-xs">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Nombre y Apellido Receptor *</label>
+                <input id="inputReceiverName" type="text" value="Martín Rodríguez (Chef Jefe)" 
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:border-brand-500 focus:outline-none">
+              </div>
+
+              <!-- Automated Inmutable Metadata Box -->
+              <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1 font-mono text-[11px]">
+                <div class="flex justify-between text-slate-400">
+                  <span>GPS Destino:</span>
+                  <span class="text-slate-200 font-bold">-34.5830, -58.4312 (Conforme)</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                  <span>Estampa Térmica BLE:</span>
+                  <span class="text-cyan-300 font-bold">4.2°C (Cadena OK)</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                  <span>Hora de Llegada:</span>
+                  <span class="text-emerald-400 font-bold">08:18 AM (Dentro ventana)</span>
+                </div>
+              </div>
+
+              <!-- Signature Pad Canvas (RNF-02: Thumb/finger friendly) -->
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-slate-300 font-semibold">Firma de Conformidad en Pantalla *</label>
+                  <button onclick="clearSignatureCanvas()" class="text-[10px] text-brand-400 hover:underline">Limpiar Firma</button>
+                </div>
+                <div class="relative bg-white rounded-xl overflow-hidden border-2 border-slate-600 h-28 touch-none">
+                  <canvas id="signatureCanvas" class="w-full h-full cursor-crosshair"></canvas>
+                  <div id="sigPlaceholder" class="absolute inset-0 flex items-center justify-center text-slate-400 pointer-events-none text-xs">
+                    <i class="fa-solid fa-pen-nib mr-1.5 text-brand-600"></i> Firme con el dedo aquí
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confirm Submission Button -->
+              <button onclick="confirmDigitalDelivery()" 
+                class="touch-target w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-black text-sm tracking-wide transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30">
+                <i class="fa-solid fa-check-double text-base"></i>
+                <span>CONFIRMAR ENTREGA Y FACTURAR</span>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- SCREEN 3: INCIDENT & REJECTION FORM (RF-05) -->
+          <div id="driverScreenIncident" class="hidden space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <button onclick="cancelIncidentForm()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1">
+                <i class="fa-solid fa-arrow-left"></i> Cancelar
+              </button>
+              <span class="text-xs font-bold text-rose-400">Ticket de Auditoría (RF-05)</span>
+            </div>
+
+            <div class="bg-slate-800/90 rounded-2xl p-3 border border-slate-700 space-y-3 text-xs">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Categoría de Rechazo / Incidencia *</label>
+                <select id="selectIncidentType" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:border-brand-500 focus:outline-none">
+                  <option value="danio_origen">Empaque dañado desde origen (depósito)</option>
+                  <option value="demora_trafico">Demora por corte de tránsito AMBA</option>
+                  <option value="cliente_cerrado">Cliente no abre rampa de descarga</option>
+                  <option value="rechazo_temperatura">Rechazo por temperatura (> 8°C)</option>
+                </select>
+              </div>
+
+              <!-- Live Photo Capture Simulation (Gallery upload blocked) -->
+              <div>
+                <label class="block text-slate-300 font-semibold mb-1">Evidencia Fotográfica en Vivo *</label>
+                <div id="incidentPhotoBox" class="bg-slate-900 border-2 border-dashed border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:border-brand-500 transition" onclick="simulateLiveCameraCapture()">
+                  <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 mb-2">
+                    <i class="fa-solid fa-camera text-base"></i>
+                  </div>
+                  <span id="txtPhotoStatus" class="text-xs font-bold text-brand-400">Tocar para tomar fotografía en vivo</span>
+                  <span class="text-[10px] text-slate-500 mt-0.5">Acceso a galería bloqueado por seguridad</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Observaciones / Motivo Escrito</label>
+                <textarea id="txtIncidentComment" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none" placeholder="Caja de cartón mojada al retirar de la cámara central..."></textarea>
+              </div>
+
+              <div class="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-[11px] flex gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-400 mt-0.5"></i>
+                <span><strong>Protección Gremial/Legal:</strong> La penalización salarial queda suspendida hasta la auditoría de Administración.</span>
+              </div>
+
+              <button onclick="submitIncidentTicket()" 
+                class="touch-target w-full py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-black text-sm tracking-wide transition flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30">
+                <i class="fa-solid fa-paper-plane text-base"></i>
+                <span>REGISTRAR INCIDENCIA AUDITABLE</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Phone Home Indicator Bar -->
+        <div class="w-full bg-slate-950 py-2 flex justify-center items-center z-30">
+          <div class="w-32 h-1 bg-slate-700 rounded-full"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: PITCH & FINANCIAL METRICS (KICK-OFF PRESENTATION HELPER) -->
+  <!-- ========================================================================= -->
+  <div id="modalPitch" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-2xl w-full p-6 space-y-6 shadow-2xl relative custom-scrollbar max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex justify-between items-start border-b border-slate-800 pb-4">
+        <div>
+          <h3 class="text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i>
+            Resumen Financiero & Técnico (Coloquio Final)
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">Sustento para los 10 minutos de exposición y preguntas de la cátedra</p>
+        </div>
+        <button onclick="togglePitchModal()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <p class="text-[11px] text-slate-400 uppercase font-semibold">Desarrollo (CAPEX)</p>
+          <p class="text-lg font-black text-emerald-400 mt-0.5">USD 19.200</p>
+          <p class="text-[10px] text-slate-400">960 hs (6 Sprints Scrum)</p>
+        </div>
+        <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <p class="text-[11px] text-slate-400 uppercase font-semibold">Infraestructura (OPEX)</p>
+          <p class="text-lg font-black text-cyan-400 mt-0.5">~USD 330 <span class="text-[10px]">/mes</span></p>
+          <p class="text-[10px] text-slate-400">AWS Cloud Serverless</p>
+        </div>
+        <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <p class="text-[11px] text-slate-400 uppercase font-semibold">Ahorro Multas</p>
+          <p class="text-lg font-black text-amber-400 mt-0.5">-80%</p>
+          <p class="text-[10px] text-slate-400">Trazabilidad Inalterable</p>
+        </div>
+        <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <p class="text-[11px] text-slate-400 uppercase font-semibold">Retorno Inversión</p>
+          <p class="text-lg font-black text-purple-400 mt-0.5">&lt; 5 Meses</p>
+          <p class="text-[10px] text-slate-400">Ahorro CEDOL + DSO</p>
+        </div>
+      </div>
+
+      <!-- Benchmark Differentiation Summary -->
+      <div class="bg-slate-800/60 rounded-2xl p-4 border border-slate-700 space-y-2 text-xs">
+        <h4 class="font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-scale-balanced text-brand-400"></i>
+          Diferenciación frente al Benchmark del Mercado
+        </h4>
+        <ul class="space-y-1.5 text-slate-300">
+          <li>• <strong>Frente a ERPs tradicionales (SAP/Tango):</strong> No procesan telemetría en submilisegundos ni resuelven ruteo vehicular VRPTW con ventanas horarias estrictas.</li>
+          <li>• <strong>Frente a apps de viandas (Social Lunch):</strong> FreshRoute es un operador 3PL neutral especializado en cadena de frío para múltiples elaboradores.</li>
+          <li>• <strong>Frente a distribuidores tradicionales (Rodríguez / El Saleciano):</strong> Reemplaza el remito papel mojado por e-POD auditable con sello térmico IoT.</li>
+        </ul>
+      </div>
+
+      <!-- 10-Minute Speech Distribution Reminder -->
+      <div class="text-xs text-slate-400 border-t border-slate-800 pt-3 flex justify-between items-center">
+        <span>⏱️ Distribución: 2 minutos por integrante (5 oradores)</span>
+        <button onclick="togglePitchModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl font-bold">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: LOGIC, REALTIME TELEMETRY & EVENT SIMULATION -->
+  <!-- ========================================================================= -->
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
