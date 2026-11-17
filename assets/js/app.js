@@ -64,7 +64,7 @@
       setTimeout(() => {
         toast.classList.add('opacity-0', 'translate-y-2');
         setTimeout(() => toast.remove(), 300);
-      }, 4000);
+      }, 8000);
     }
 
     // Chart.js Live Telemetry Initialization
